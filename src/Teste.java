@@ -255,7 +255,4 @@ public class Teste {
             }
         } while (menu != 0);
     }
-
-    private static void clienteExiste() {
-    }
 }
