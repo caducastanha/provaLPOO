@@ -80,7 +80,6 @@ public class Teste {
     public static void main(String[] args) throws Exception {
 
         ArrayList<Conta> contas = new ArrayList<Conta>();
-        ArrayList<Poupanca> poupancas = new ArrayList<Poupanca>();
 
         Scanner sc = new Scanner(System.in);
         int menu = 10;
@@ -96,7 +95,7 @@ public class Teste {
 
             switch (menu) {
                 case 1:
-                    if ((contas.size() + poupancas.size()) < 10) {
+                    if (contas.size() < 10) {
                         int m = 0;
 
                         System.out
@@ -109,7 +108,7 @@ public class Teste {
                                 break;
 
                             case 2:
-                                poupancas.add(CreateSavingsAccount(poupancas.size()));
+                                contas.add(CreateSavingsAccount(contas.size()));
                                 break;
                         }
                     } else {
@@ -134,17 +133,6 @@ public class Teste {
                         }
                     }
 
-                    for (Poupanca poupanca : poupancas) {
-                        if (poupanca.getCliente().getCpf().equals(cpf)) {
-                            clienteExiste = true;
-                            System.out.println("Informe o valor do depósito: ");
-                            double valor = Double.parseDouble(sc.next());
-
-                            poupanca.setSaldo(poupanca.getSaldo() + valor);
-                            novoSaldo = poupanca.getSaldo();
-                        }
-                    }
-
                     if (!clienteExiste) {
                         clientNotExists();
                     } else {
@@ -161,9 +149,10 @@ public class Teste {
                     System.out.println("\n\n Informe o seu cpf para render o juros:");
                     cpf = sc.next();
 
-                    for (Poupanca poupanca : poupancas) {
-                        if (poupanca.getCliente().getCpf().equals(cpf)) {
+                    for (Conta conta : contas) {
+                        if (conta.getCliente().getCpf().equals(cpf)) {
                             clienteExiste = true;
+                            Poupanca poupanca = (Poupanca) conta;
                             poupanca.renderJuros();
                             novoSaldo = poupanca.getSaldo();
                         }
@@ -187,15 +176,6 @@ public class Teste {
                     System.out.println("Informe o nome da agencia: ");
                     String nomeAgencia = sc.next();
 
-                    for (Poupanca poupanca : poupancas) {
-                        if (poupanca.getBanco().getNumeroAgencia() == numeroAgencia
-                                && poupanca.getBanco().getNomeAgencia().equals(nomeAgencia)) {
-                            clienteExiste = true;
-                            System.out.println("Nome do Cliente: " + poupanca.getCliente().getNome());
-                            System.out.println("Nome do CPF: " + poupanca.getCliente().getCpf());
-                        }
-                    }
-
                     for (Conta conta : contas) {
                         if (conta.getBanco().getNumeroAgencia() == numeroAgencia
                                 && conta.getBanco().getNomeAgencia().equals(nomeAgencia)) {
@@ -215,20 +195,6 @@ public class Teste {
                     clienteExiste = false;
                     System.out.println("Informe o nome do cliente: ");
                     String nome = sc.next();
-
-                    for (Poupanca poupanca : poupancas) {
-                        if (poupanca.getCliente().getNome().equals(nome)) {
-                            clienteExiste = true;
-                            System.out.println("Informe o numero da agencia: ");
-                            numeroAgencia = Integer.parseInt(sc.next());
-
-                            System.out.println("Informe o nome da agencia: ");
-                            nomeAgencia = sc.next();
-
-                            poupanca.getBanco().setNumeroAgencia(numeroAgencia);
-                            poupanca.getBanco().setNomeAgencia(nomeAgencia);
-                        }
-                    }
 
                     for (Conta conta : contas) {
                         if (conta.getCliente().getNome().equals(nome)) {
@@ -250,7 +216,9 @@ public class Teste {
                     break;
 
                 default:
-                    System.out.println("\n\nOpção inválida \nTente novamente.");
+                    if (menu < 0 || menu > 5) {
+                        System.out.println("\n\nOpção inválida \nTente novamente.");
+                    }
                     break;
             }
         } while (menu != 0);
